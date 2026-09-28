@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo - Login</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .login-page {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f1efff;
+        }
+
+        .login-page::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            top: -190px;
+            right: -120px;
+            border-radius: 50%;
+            background: rgba(103, 80, 220, 0.08);
+        }
+
+        .login-page::after {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            left: -160px;
+            bottom: -170px;
+            border-radius: 50%;
+            background: rgba(103, 80, 220, 0.08);
+        }
+
+        .login-layout {
+            position: relative;
+            z-index: 2;
+            width: 1180px;
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1fr 430px;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .login-intro {
+            padding: 20px 0;
+        }
+
+        .login-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 85px;
+            color: #25203d;
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .login-brand-mark {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #654fd8;
+            box-shadow: 0 8px 20px rgba(101, 79, 216, 0.22);
+        }
+
+        .login-brand-mark img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .intro-label {
+            display: inline-block;
+            margin-bottom: 18px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #e5e0ff;
+            color: #6048d0;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+        }
+
+        .login-intro h1 {
+            margin: 0;
+            color: #27233c;
+            font-size: 58px;
+            line-height: 1.05;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        .login-intro h1 span {
+            color: #654fd8;
+        }
+
+        .intro-text {
+            max-width: 570px;
+            margin: 24px 0 0;
+            color: #716d80;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .intro-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            max-width: 560px;
+            margin-top: 42px;
+        }
+
+        .intro-feature {
+            min-height: 125px;
+            padding: 17px;
+            box-sizing: border-box;
+            border: 1px solid rgba(101, 79, 216, 0.12);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .intro-feature-icon {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 11px;
+            border-radius: 9px;
+            background: #e9e5ff;
+            color: #654fd8;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .intro-feature h3 {
+            margin: 0 0 5px;
+            color: #302c45;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .intro-feature p {
+            margin: 0;
+            color: #817d8e;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .login-panel {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 42px 40px;
+            border: 1px solid rgba(101, 79, 216, 0.10);
+            border-radius: 20px;
+            background: #ffffff;
+            box-shadow: 0 25px 60px rgba(64, 51, 125, 0.12);
+        }
+
+        .login-heading {
+            margin-bottom: 28px;
+        }
+
+        .login-heading h2 {
+            margin: 0 0 8px;
+            color: #28243a;
+            font-size: 29px;
+            font-weight: 800;
+        }
+
+        .login-heading p {
+            margin: 0;
+            color: #85818f;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .login-alert {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border: 1px solid #f0cccc;
+            border-radius: 10px;
+            background: #fff4f4;
+            color: #c23b3b;
+            font-size: 13px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 19px;
+        }
+
+        .login-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .login-field label {
+            color: #383447;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .login-input-wrap {
+            position: relative;
+        }
+
+        .login-input-wrap input {
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            padding: 0 15px;
+            border: 1px solid #dedce6;
+            border-radius: 11px;
+            outline: none;
+            background: #f9f9fc;
+            color: #302d3d;
+            font-family: inherit;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .login-input-wrap input:focus {
+            border-color: #725de0;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(114, 93, 224, 0.10);
+        }
+
+        .login-input-wrap input::placeholder {
+            color: #aaa7b2;
+        }
+
+        .pin-toggle {
+            position: absolute;
+            top: 50%;
+            right: 13px;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #746f80;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .login-submit {
+            width: 100%;
+            height: 52px;
+            margin-top: 3px;
+            border: none;
+            border-radius: 11px;
+            background: #654fd8;
+            color: #ffffff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(101, 79, 216, 0.20);
+            transition: 0.2s;
+        }
+
+        .login-submit:hover {
+            background: #5640c5;
+            transform: translateY(-1px);
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #aaa6b3;
+            font-size: 11px;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e9e7ee;
+        }
+
+        .login-register {
+            text-align: center;
+            color: #85818f;
+            font-size: 12px;
+        }
+
+        .login-register a {
+            color: #654fd8;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-register a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="login-page">
+
+    <div class="login-layout">
+
+        <section class="login-intro">
+
+            <a href="index.html" class="login-brand">
+                <span class="login-brand-mark">
+                    <img src="images/payoo-logo.png" alt="Payoo">
+                </span>
+                Payoo
+            </a>
+
+            <span class="intro-label">DIGITAL WALLET</span>
+
+            <h1>
+                Your money,<br>
+                <span>your way.</span>
+            </h1>
+
+            <p class="intro-text">
+                A simple and secure digital wallet for managing your money,
+                sending payments, recharging mobile numbers and paying bills
+                from one place.
+            </p>
+
+            <div class="intro-features">
+
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">↗</div>
+                    <h3>Send Money</h3>
+                    <p>Transfer money easily using a mobile number.</p>
+                </div>
+
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">৳</div>
+                    <h3>Pay Bills</h3>
+                    <p>Manage your everyday payments from one wallet.</p>
+                </div>
+
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">✓</div>
+                    <h3>Track Activity</h3>
+                    <p>Keep your transactions organized and accessible.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="login-panel">
+
+            <div class="login-heading">
+                <h2>Welcome back</h2>
+                <p>Sign in to continue to your Payoo wallet.</p>
+            </div>
+
+            <div id="formAlert" class="login-alert"></div>
+
+            <form id="loginForm" class="login-form">
+
+                <div class="login-field">
+                    <label for="loginMobile">Mobile Number</label>
+
+                    <div class="login-input-wrap">
+                        <input
+                            type="text"
+                            id="loginMobile"
+                            name="mobile"
+                            placeholder="01XXXXXXXXX"
+                            autocomplete="tel"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="login-field">
+                    <label for="loginPin">PIN</label>
+
+                    <div class="login-input-wrap">
+                        <input
+                            type="password"
+                            id="loginPin"
+                            name="pin"
+                            placeholder="Enter your PIN"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="pinToggle"
+                            class="pin-toggle"
+                        >
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-submit">
+                    Login to Payoo
+                </button>
+
+            </form>
+
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+
+            <div class="login-register">
+                Don't have an account?
+                <a href="register.html">Create account</a>
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

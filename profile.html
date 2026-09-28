@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Profile</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .profile-content {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 24px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .photo-wrap {
+            position: relative;
+            width: 82px;
+            height: 82px;
+            flex-shrink: 0;
+        }
+
+        .profile-photo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 82px;
+            height: 82px;
+            overflow: hidden;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 27px;
+            font-weight: 700;
+            box-shadow: 0 0 0 1px #e4e1f5;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-edit {
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .profile-info-head h2 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 20px;
+        }
+
+        .profile-info-head p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .photo-options {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .photo-options button {
+            padding: 7px 10px;
+            border: 1px solid #e1deef;
+            border-radius: 8px;
+            background: #f8f7ff;
+            color: var(--primary);
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .photo-options button:hover {
+            background: #eeeaff;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 18px;
+        }
+
+        .profile-card {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-head h2 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .card-head p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .profile-info {
+            border-top: 1px solid var(--border);
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .profile-row > span {
+            color: var(--muted);
+        }
+
+        .profile-row > strong {
+            color: var(--text);
+            text-align: right;
+        }
+
+        .wallet-balance {
+            font-size: 21px;
+        }
+
+        .status-active {
+            color: var(--success) !important;
+        }
+
+        .account-number {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .copy-account {
+            padding: 5px 8px;
+            border: 0;
+            border-radius: 7px;
+            background: #f1efff;
+            color: var(--primary);
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .edit-section,
+        .pin-section {
+            display: none;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .edit-section.active,
+        .pin-section.active {
+            display: block;
+        }
+
+        .edit-form,
+        .pin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .edit-form .field,
+        .pin-form .field {
+            margin: 0;
+        }
+
+        .edit-actions,
+        .pin-actions,
+        .wallet-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-actions .btn,
+        .pin-actions .btn,
+        .wallet-actions .btn {
+            flex: 1;
+        }
+
+        .wallet-actions {
+            margin-top: 20px;
+        }
+
+        .profile-alert {
+            margin-bottom: 16px;
+        }
+
+        #photoInput {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout>
+                <span>↪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Profile</h1>
+                    <p>Manage your Payoo account</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content profile-content">
+
+            <section class="profile-header">
+                <div class="profile-left">
+
+                    <div class="photo-wrap">
+                        <div class="profile-photo" id="profilePhoto"></div>
+
+                        <button
+                            type="button"
+                            class="photo-edit"
+                            id="photoEditButton"
+                            title="Change profile photo"
+                        >✎</button>
+                    </div>
+
+                    <div class="profile-info-head">
+                        <h2 id="profileHeaderName"></h2>
+                        <p id="profileHeaderMobile"></p>
+
+                        <div class="photo-options">
+                            <button type="button" id="uploadPhotoButton">Change Photo</button>
+                            <button type="button" id="removePhotoButton">Remove</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="editProfileButton"
+                    class="btn btn-secondary"
+                >
+                    Edit Profile
+                </button>
+            </section>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/png,image/jpeg,image/webp"
+            >
+
+            <div class="profile-grid">
+
+                <section class="profile-card">
+
+                    <div class="card-head">
+                        <div>
+                            <h2>Personal Information</h2>
+                            <p>Your registered Payoo account details.</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-info">
+
+                        <div class="profile-row">
+                            <span>Full name</span>
+                            <strong id="profileName"></strong>
+                        </div>
+
+                        <div class="profile-row">
+                            <span>Mobile / Account</span>
+
+                            <div class="account-number">
+                                <strong id="profileMobile"></strong>
+                                <button
+                                    type="button"
+                                    class="copy-account"
+                                    id="copyAccount"
+                                >Copy</button>
+                            </div>
+                        </div>
+
+                        <div class="profile-row">
+                            <span>NID</span>
+                            <strong id="profileNid"></strong>
+                        </div>
+
+                        <div class="profile-row">
+                            <span>Date of birth</span>
+                            <strong id="profileDob"></strong>
+                        </div>
+
+                    </div>
+
+                    <div class="edit-section" id="editSection">
+
+                        <div id="profileAlert" class="profile-alert"></div>
+
+                        <form id="editProfileForm" class="edit-form">
+
+                            <div class="field">
+                                <label for="editName">Full Name</label>
+                                <input
+                                    id="editName"
+                                    type="text"
+                                    name="name"
+                                    placeholder="Enter your full name"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="editMobile">Mobile / Account Number</label>
+                                <input
+                                    id="editMobile"
+                                    type="tel"
+                                    name="mobile"
+                                    readonly
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="editNid">NID Number</label>
+                                <input
+                                    id="editNid"
+                                    type="text"
+                                    name="nid"
+                                    placeholder="Enter NID number"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="editDob">Date of Birth</label>
+                                <input
+                                    id="editDob"
+                                    type="date"
+                                    name="dob"
+                                    required
+                                >
+                            </div>
+
+                            <div class="edit-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    Save Changes
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="cancelEditButton"
+                                    class="btn btn-secondary"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </section>
+
+                <section class="profile-card">
+
+                    <div class="card-head">
+                        <div>
+                            <h2>Wallet &amp; Security</h2>
+                            <p>Manage your wallet and account security.</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-info">
+
+                        <div class="profile-row">
+                            <span>Current balance</span>
+                            <strong id="profileBalance" class="wallet-balance"></strong>
+                        </div>
+
+                        <div class="profile-row">
+                            <span>Account status</span>
+                            <strong class="status-active">Active</strong>
+                        </div>
+
+                        <div class="profile-row">
+                            <span>Account type</span>
+                            <strong>Payoo Wallet</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="wallet-actions">
+                        <button
+                            type="button"
+                            id="changePinButton"
+                            class="btn btn-secondary"
+                        >
+                            Change PIN
+                        </button>
+                    </div>
+
+                    <div id="pinSection" class="pin-section">
+
+                        <div id="pinAlert" class="profile-alert"></div>
+
+                        <form id="changePinForm" class="pin-form">
+
+                            <div class="field">
+                                <label for="currentPin">Current PIN</label>
+                                <input
+                                    id="currentPin"
+                                    type="password"
+                                    name="currentPin"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    placeholder="Enter current PIN"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="newPin">New PIN</label>
+                                <input
+                                    id="newPin"
+                                    type="password"
+                                    name="newPin"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    placeholder="Enter new PIN"
+                                    required
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="confirmPin">Confirm New PIN</label>
+                                <input
+                                    id="confirmPin"
+                                    type="password"
+                                    name="confirmPin"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    placeholder="Confirm new PIN"
+                                    required
+                                >
+                            </div>
+
+                            <div class="pin-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    Update PIN
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="cancelPinButton"
+                                    class="btn btn-secondary"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </section>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

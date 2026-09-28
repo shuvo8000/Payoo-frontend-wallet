@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Add Money</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .add-content {
+            width: 100%;
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+        .intro {
+            margin-bottom: 22px;
+        }
+        .intro h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 23px;
+            font-weight: 750;
+        }
+        .intro p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .add-grid {
+            display: grid;
+            grid-template-columns: 1.18fr 0.82fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .add-card,
+        .summary {
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 28px rgba(25, 20, 55, 0.045);
+        }
+        .add-card,
+        .summary {
+            padding: 27px;
+        }
+        .add-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+        .add-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 720;
+        }
+        .add-head p {
+            max-width: 430px;
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+        .add-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            place-items: center;
+            border: 1px solid rgba(103, 72, 226, 0.1);
+            border-radius: 12px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 20px;
+            font-weight: 800;
+        }
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+        .add-form .field {
+            margin: 0;
+        }
+        .add-form label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 650;
+        }
+        .add-form input,
+        .add-form select {
+            width: 100%;
+            height: 45px;
+            box-sizing: border-box;
+            padding: 0 13px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            font-size: 12px;
+        }
+        .add-form input:focus,
+        .add-form select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(103, 72, 226, 0.08);
+        }
+        .add-form input::placeholder {
+            color: #a5a6b0;
+        }
+        .method {
+            padding-bottom: 17px;
+            border-bottom: 1px solid var(--border);
+        }
+        .source-fields {
+            display: none;
+            padding: 17px;
+            border: 1px solid #e9e5f7;
+            border-radius: 13px;
+            background: #fbfaff;
+        }
+        .source-fields.active {
+            display: block;
+        }
+        .source-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 15px;
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 750;
+        }
+        .source-title::before {
+            content: "";
+            width: 4px;
+            height: 15px;
+            border-radius: 10px;
+            background: var(--primary);
+        }
+        .source-fields .field + .field {
+            margin-top: 15px;
+        }
+        .amount-wrap {
+            position: relative;
+        }
+        .amount-wrap span {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 750;
+        }
+        .amount-wrap input {
+            padding-left: 32px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .pin-wrap {
+            position: relative;
+        }
+        .pin-wrap input {
+            padding-right: 48px;
+        }
+        .pin-toggle {
+            position: absolute;
+            top: 50%;
+            right: 9px;
+            display: grid;
+            width: 32px;
+            height: 32px;
+            place-items: center;
+            transform: translateY(-50%);
+            border: 0;
+            border-radius: 8px;
+            color: var(--muted);
+            background: transparent;
+            cursor: pointer;
+        }
+        .pin-toggle:hover {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+        .form-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 2px;
+            padding-top: 4px;
+        }
+        .security {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+        .security-icon {
+            display: grid;
+            width: 22px;
+            height: 22px;
+            place-items: center;
+            border-radius: 7px;
+            color: var(--success);
+            background: rgba(32, 178, 107, 0.09);
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .add-btn {
+            min-width: 130px;
+            height: 43px;
+        }
+        .balance {
+            margin-bottom: 24px;
+            padding: 20px;
+            border: 1px solid rgba(103, 72, 226, 0.1);
+            border-radius: 14px;
+            background: var(--primary-soft);
+        }
+        .balance span {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+        .balance strong {
+            color: var(--primary);
+            font-size: 27px;
+            font-weight: 760;
+        }
+        .summary-title {
+            margin: 0 0 13px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .limits {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+        }
+        .limit {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 50px;
+            padding: 0 14px;
+        }
+        .limit + .limit {
+            border-top: 1px solid var(--border);
+        }
+        .limit span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+        .limit strong {
+            color: var(--text);
+            font-size: 11px;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--success) !important;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        .steps {
+            margin-top: 23px;
+        }
+        .steps h3 {
+            margin: 0 0 12px;
+            color: var(--text);
+            font-size: 13px;
+        }
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-number {
+            display: grid;
+            width: 27px;
+            height: 27px;
+            flex-shrink: 0;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 10px;
+            font-weight: 750;
+        }
+        .step-text {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        .notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 22px;
+            padding: 13px;
+            border: 1px solid #ebe7ff;
+            border-radius: 11px;
+            background: #faf9ff;
+        }
+        .notice-icon {
+            display: grid;
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .notice p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout><span>↪</span>Logout</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Add Money</h1>
+                    <p>Fund your Payoo wallet</p>
+                </div>
+            </div>
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content add-content">
+            <div class="intro">
+                <h2>Add money to your wallet</h2>
+                <p>Add funds securely using a supported demo funding method.</p>
+            </div>
+
+            <div class="add-grid">
+                <section class="card add-card">
+                    <div class="add-head">
+                        <div>
+                            <h2>Add funds</h2>
+                            <p>Choose your funding method and enter the required details.</p>
+                        </div>
+                        <div class="add-icon">+</div>
+                    </div>
+
+                    <div id="formAlert"></div>
+
+                    <form id="addMoneyForm" class="add-form">
+                        <div class="field method">
+                            <label for="fundingMethod">Funding Method</label>
+                            <select id="fundingMethod" name="method" required>
+                                <option value="Bank Account">Bank Account</option>
+                                <option value="Mobile Banking">Mobile Banking</option>
+                            </select>
+                        </div>
+
+                        <div id="bankSourceFields" class="source-fields active">
+                            <p class="source-title">Bank Account Details</p>
+                            <div class="field">
+                                <label for="bankName">Bank Name</label>
+                                <select id="bankName" name="bankName">
+                                    <option value="">Select bank</option>
+                                    <option value="BRAC Bank">BRAC Bank</option>
+                                    <option value="Dutch-Bangla Bank">Dutch-Bangla Bank (DBBL)</option>
+                                    <option value="Islami Bank Bangladesh">Islami Bank Bangladesh</option>
+                                    <option value="Prime Bank">Prime Bank</option>
+                                    <option value="City Bank">City Bank</option>
+                                    <option value="UCB Bank">UCB Bank</option>
+                                    <option value="IFIC Bank">IFIC Bank</option>
+                                    <option value="Sonali Bank">Sonali Bank</option>
+                                    <option value="Janata Bank">Janata Bank</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="bankAccountNumber">Account Number</label>
+                                <input id="bankAccountNumber" name="bankAccountNumber" type="text" inputmode="numeric" maxlength="20" placeholder="Enter bank account number" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div id="mobileBankingFields" class="source-fields">
+                            <p class="source-title">Mobile Banking Details</p>
+                            <div class="field">
+                                <label for="mobileProvider">Mobile Banking Provider</label>
+                                <select id="mobileProvider" name="mobileProvider">
+                                    <option value="">Select provider</option>
+                                    <option value="bKash">bKash</option>
+                                    <option value="Nagad">Nagad</option>
+                                    <option value="Rocket">Rocket</option>
+                                    <option value="Upay">Upay</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="mobileNumber">Mobile Number</label>
+                                <input id="mobileNumber" name="mobileNumber" type="tel" inputmode="tel" maxlength="14" placeholder="01XXXXXXXXX" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="amount">Amount</label>
+                            <div class="amount-wrap">
+                                <span>৳</span>
+                                <input id="amount" name="amount" type="number" min="50" max="100000" step="0.01" placeholder="Enter amount" autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="pin">Payoo PIN</label>
+                            <div class="pin-wrap">
+                                <input id="pin" name="pin" type="password" maxlength="6" inputmode="numeric" placeholder="Enter your Payoo PIN" autocomplete="off" required>
+                                <button type="button" class="pin-toggle" id="togglePin" title="Show PIN">◉</button>
+                            </div>
+                        </div>
+
+                        <div class="form-bottom">
+                            <div class="security">
+                                <span class="security-icon">✓</span>
+                                <span>Protected by your Payoo PIN</span>
+                            </div>
+                            <button class="btn btn-primary add-btn" type="submit">Add Money</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="card summary">
+                    <div class="add-head">
+                        <div>
+                            <h2>Wallet Summary</h2>
+                            <p>Current balance and demo transaction information.</p>
+                        </div>
+                    </div>
+
+                    <div class="balance">
+                        <span>Current Balance</span>
+                        <strong id="currentBalance">৳0.00</strong>
+                    </div>
+
+                    <h3 class="summary-title">Add Money Limits</h3>
+
+                    <div class="limits">
+                        <div class="limit">
+                            <span>Minimum</span>
+                            <strong>৳50</strong>
+                        </div>
+                        <div class="limit">
+                            <span>Maximum</span>
+                            <strong>৳100,000</strong>
+                        </div>
+                        <div class="limit">
+                            <span>Processing</span>
+                            <strong class="status"><span class="dot"></span>Demo / instant</strong>
+                        </div>
+                    </div>
+
+                    <div class="steps">
+                        <h3>How it works</h3>
+                        <div class="step-list">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Select a funding method.</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Enter the required account details.</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Enter the amount and confirm with your PIN.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notice">
+                        <div class="notice-icon">i</div>
+                        <p>This is a frontend-only demo. No real bank or mobile banking transaction is made.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/add-money.js"></script>
+</body>
+</html>

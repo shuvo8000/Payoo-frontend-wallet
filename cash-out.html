@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Cash Out</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .cashout-content {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .cashout-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 18px;
+        }
+
+        .cashout-card {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .cashout-head {
+            margin-bottom: 22px;
+        }
+
+        .cashout-head h2 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .cashout-head p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .cashout-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .cashout-form .field {
+            margin: 0;
+        }
+
+        .cashout-form input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .pin-wrap {
+            position: relative;
+        }
+
+        .pin-wrap input {
+            padding-right: 48px;
+        }
+
+        .pin-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            padding: 5px;
+            border: 0;
+            transform: translateY(-50%);
+            background: transparent;
+            color: var(--muted);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .pin-toggle:hover {
+            color: var(--primary);
+        }
+
+        .cashout-button {
+            width: 100%;
+            margin-top: 2px;
+        }
+
+        .balance {
+            margin-bottom: 18px;
+            padding: 17px;
+            border: 1px solid #e7e1ff;
+            border-radius: 12px;
+            background: var(--primary-soft);
+        }
+
+        .balance span {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .balance strong {
+            color: var(--text);
+            font-size: 23px;
+        }
+
+        .details {
+            border-top: 1px solid var(--border);
+        }
+
+        .detail {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .detail strong {
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .detail.total {
+            padding-top: 17px;
+            padding-bottom: 17px;
+        }
+
+        .detail.total span {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .detail.total strong {
+            font-size: 15px;
+        }
+
+        .rules {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ededf2;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        .rules h3 {
+            margin: 0 0 9px;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .rules ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .demo-note {
+            margin-top: 18px;
+            padding: 13px 15px;
+            border: 1px solid #f2dfaa;
+            border-radius: 10px;
+            background: #fff8e8;
+            color: #806515;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout>
+                <span>↪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Cash Out</h1>
+                    <p>Withdraw money from your Payoo wallet</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content cashout-content">
+            <div class="cashout-grid">
+
+                <section class="cashout-card">
+                    <div class="cashout-head">
+                        <h2>Withdraw from wallet</h2>
+                        <p>Enter an agent number and the amount you want to withdraw.</p>
+                    </div>
+
+                    <div id="formAlert"></div>
+
+                    <form id="cashOutForm" class="cashout-form">
+
+                        <div class="field">
+                            <label for="agent">Agent Number</label>
+                            <input
+                                name="agent"
+                                id="agent"
+                                type="tel"
+                                placeholder="01712345678"
+                                inputmode="tel"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="amount">Amount</label>
+                            <input
+                                name="amount"
+                                id="amount"
+                                type="number"
+                                min="50"
+                                max="50000"
+                                step="0.01"
+                                placeholder="Enter amount"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="pin">Payoo PIN</label>
+                            <div class="pin-wrap">
+                                <input
+                                    name="pin"
+                                    id="pin"
+                                    type="password"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    placeholder="Enter your PIN"
+                                    required
+                                >
+                                <button
+                                    type="button"
+                                    class="pin-toggle"
+                                    id="togglePin"
+                                    title="Show PIN"
+                                >◉</button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary cashout-button"
+                        >
+                            Cash Out
+                        </button>
+
+                    </form>
+                </section>
+
+                <section class="cashout-card">
+
+                    <div class="cashout-head">
+                        <h2>Cash Out Summary</h2>
+                        <p>Review your wallet deduction before confirming.</p>
+                    </div>
+
+                    <div class="balance">
+                        <span>Current Wallet Balance</span>
+                        <strong id="currentBalance">৳0.00</strong>
+                    </div>
+
+                    <div class="details">
+
+                        <div class="detail">
+                            <span>Cash-out amount</span>
+                            <strong id="cashOutAmount">৳0.00</strong>
+                        </div>
+
+                        <div class="detail">
+                            <span>Cash-out fee</span>
+                            <strong id="fee">৳10.00</strong>
+                        </div>
+
+                        <div class="detail total">
+                            <span>Total wallet deduction</span>
+                            <strong id="total">৳10.00</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="rules">
+                        <h3>Cash Out Limits</h3>
+                        <ul>
+                            <li>Minimum: ৳50</li>
+                            <li>Maximum: ৳50,000</li>
+                            <li>Cash-out fee: ৳10</li>
+                            <li>Sufficient wallet balance is required</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-note">
+                        <strong>Demo only:</strong>
+                        This application does not perform real financial transactions.
+                        Balance and transaction data are stored in browser localStorage.
+                    </div>
+
+                </section>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/cash-out.js"></script>
+</body>
+</html>

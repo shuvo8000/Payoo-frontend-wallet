@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Mobile Recharge</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .recharge-content {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .recharge-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 18px;
+        }
+
+        .recharge-card {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .recharge-head {
+            margin-bottom: 22px;
+        }
+
+        .recharge-head h2 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .recharge-head p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .recharge-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .recharge-form .field {
+            margin: 0;
+        }
+
+        .recharge-form input,
+        .recharge-form select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .recharge-button {
+            width: 100%;
+            margin-top: 2px;
+        }
+
+        .operators {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .operator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .operator:hover {
+            border-color: #d9d1ff;
+            box-shadow: var(--shadow);
+        }
+
+        .operator-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            padding: 7px;
+            border-radius: 11px;
+            background: var(--primary-soft);
+        }
+
+        .operator-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .limits {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .limit {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .limit span {
+            color: var(--muted);
+        }
+
+        .limit strong {
+            color: var(--text);
+        }
+
+        .recharge-info {
+            margin-top: 18px;
+            padding: 14px 15px;
+            border: 1px solid #f2dfaa;
+            border-radius: 10px;
+            background: #fff8e8;
+            color: #806515;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout>
+                <span>↪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Mobile Recharge</h1>
+                    <p>Recharge any Bangladesh mobile number</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content recharge-content">
+            <div class="recharge-grid">
+
+                <section class="recharge-card">
+                    <div class="recharge-head">
+                        <h2>Recharge mobile</h2>
+                        <p>Enter the mobile number and recharge amount.</p>
+                    </div>
+
+                    <div id="formAlert"></div>
+
+                    <form id="rechargeForm" class="recharge-form">
+
+                        <div class="field">
+                            <label for="mobile">Mobile Number</label>
+                            <input
+                                id="mobile"
+                                name="mobile"
+                                type="tel"
+                                placeholder="01712345678"
+                                inputmode="tel"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="operator">Operator</label>
+                            <select id="operator" name="operator">
+                                <option>Grameenphone</option>
+                                <option>Robi</option>
+                                <option>Banglalink</option>
+                                <option>Airtel</option>
+                                <option>Teletalk</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="rechargeType">Recharge Type</label>
+                            <select id="rechargeType" name="rechargeType">
+                                <option>Prepaid</option>
+                                <option>Postpaid</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="amount">Amount</label>
+                            <input
+                                id="amount"
+                                name="amount"
+                                type="number"
+                                min="20"
+                                max="10000"
+                                step="0.01"
+                                placeholder="Enter recharge amount"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="pin">Payoo PIN</label>
+                            <input
+                                id="pin"
+                                name="pin"
+                                type="password"
+                                maxlength="6"
+                                inputmode="numeric"
+                                placeholder="Enter your PIN"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn-primary recharge-button">
+                            Recharge
+                        </button>
+
+                    </form>
+                </section>
+
+                <section class="recharge-card">
+
+                    <div class="recharge-head">
+                        <h2>Supported Operators</h2>
+                        <p>Available mobile operators for this demo.</p>
+                    </div>
+
+                    <div class="operators">
+
+                        <div class="operator">
+                            <div class="operator-icon">
+                                <img
+                                    src="images/gp.png"
+                                    alt="Grameenphone"
+                                >
+                            </div>
+                            <span>Grameenphone</span>
+                        </div>
+
+                        <div class="operator">
+                            <div class="operator-icon">
+                                <img
+                                    src="images/robi.png"
+                                    alt="Robi"
+                                >
+                            </div>
+                            <span>Robi</span>
+                        </div>
+
+                        <div class="operator">
+                            <div class="operator-icon">
+                                <img
+                                    src="images/banglalink.png"
+                                    alt="Banglalink"
+                                >
+                            </div>
+                            <span>Banglalink</span>
+                        </div>
+
+                        <div class="operator">
+                            <div class="operator-icon">
+                                <img
+                                    src="images/airtel.png"
+                                    alt="Airtel"
+                                >
+                            </div>
+                            <span>Airtel</span>
+                        </div>
+
+                        <div class="operator">
+                            <div class="operator-icon">
+                                <img
+                                    src="images/teletalk.png"
+                                    alt="Teletalk"
+                                >
+                            </div>
+                            <span>Teletalk</span>
+                        </div>
+
+                    </div>
+
+                    <div class="limits">
+
+                        <div class="limit">
+                            <span>Minimum recharge</span>
+                            <strong>৳20</strong>
+                        </div>
+
+                        <div class="limit">
+                            <span>Maximum recharge</span>
+                            <strong>৳10,000</strong>
+                        </div>
+
+                        <div class="limit">
+                            <span>Recharge fee</span>
+                            <strong>৳0.00</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="recharge-info">
+                        <strong>Demo only:</strong>
+                        No real mobile recharge service is connected.
+                        Recharge amounts are deducted from the Payoo demo wallet
+                        and saved in browser localStorage.
+                    </div>
+
+                </section>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/recharge.js"></script>
+</body>
+</html>

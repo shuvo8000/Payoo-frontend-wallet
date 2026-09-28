@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo - Transaction History</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .transactions-page {
+            max-width: 1200px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout>
+                <span>↪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Transaction History</h1>
+                    <p>All your Payoo wallet activity</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content transactions-page">
+            <section class="card">
+
+                <div class="card-title">
+                    <h2>All Activity</h2>
+                </div>
+
+                <div class="search-row">
+                    <input
+                        id="search"
+                        type="text"
+                        placeholder="Search transaction ID, number, amount..."
+                    >
+
+                    <select id="typeFilter">
+                        <option value="">All types</option>
+                        <option value="add_money">Add Money</option>
+                        <option value="send_money">Send Money</option>
+                        <option value="received_money">Received Money</option>
+                        <option value="cash_out">Cash Out</option>
+                        <option value="mobile_recharge">Mobile Recharge</option>
+                        <option value="bill_payment">Bill Payment</option>
+                    </select>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Party</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionBody"></tbody>
+                    </table>
+                </div>
+
+            </section>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/transactions.js"></script>
+</body>
+</html>

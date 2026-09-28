@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo - Change PIN</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .pin-page {
+            max-width: 900px;
+        }
+
+        .pin-note {
+            line-height: 1.6;
+        }
+
+        .pin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .pin-form .field {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="dashboard.html"><span class="brand-mark">P</span>Payoo</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout><span>↪</span>Logout</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Change PIN</h1>
+                    <p>Secure demo wallet experience</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content pin-page">
+            <div class="grid grid-2">
+
+                <section class="card">
+                    <div class="card-title">
+                        <h2>Update your PIN</h2>
+                    </div>
+
+                    <div id="formAlert"></div>
+
+                    <form id="changePinForm" class="pin-form">
+                        <div class="field">
+                            <label for="currentPin">Current PIN</label>
+                            <input
+                                id="currentPin"
+                                name="currentPin"
+                                type="password"
+                                maxlength="6"
+                                inputmode="numeric"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="newPin">New PIN</label>
+                            <input
+                                id="newPin"
+                                name="newPin"
+                                type="password"
+                                maxlength="6"
+                                inputmode="numeric"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="confirmPin">Confirm New PIN</label>
+                            <input
+                                id="confirmPin"
+                                name="confirmPin"
+                                type="password"
+                                maxlength="6"
+                                inputmode="numeric"
+                                required
+                            >
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Change PIN</button>
+                    </form>
+                </section>
+
+                <section class="card">
+                    <div class="card-title">
+                        <h2>Demo Security Note</h2>
+                    </div>
+
+                    <p class="muted pin-note">
+                        This project stores the PIN in localStorage because it has no backend.
+                        That is acceptable for a classroom/demo wallet, but never for a real financial application.
+                    </p>
+                </section>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/change-pin.js"></script>
+</body>
+</html>

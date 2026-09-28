@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Register</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .register-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 20px;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 620px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 15px 40px rgba(35, 35, 65, 0.07);
+        }
+
+        .register-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            margin-bottom: 22px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .register-brand .brand-mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 9px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .register-heading {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .register-heading h1 {
+            margin: 0 0 7px;
+            color: var(--text);
+            font-size: 25px;
+        }
+
+        .register-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .register-photo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .register-photo-wrapper {
+            position: relative;
+            width: 86px;
+            height: 86px;
+        }
+
+        .register-photo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 86px;
+            height: 86px;
+            overflow: hidden;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            background: #eeeaff;
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 700;
+            box-shadow: 0 0 0 1px #dfdbee;
+        }
+
+        .register-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-camera-button {
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 29px;
+            height: 29px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .photo-label {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .photo-actions button {
+            padding: 6px 10px;
+            border: 1px solid #e1deef;
+            border-radius: 8px;
+            background: #f8f7ff;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .photo-actions button:hover {
+            background: #eeeaff;
+        }
+
+        #profilePhotoInput {
+            display: none;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+        }
+
+        .register-form .field {
+            margin-top: 0 !important;
+        }
+
+        .register-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 45px;
+        }
+
+        .toggle-pin {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            padding: 5px;
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 15px;
+            transform: translateY(-50%);
+        }
+
+        .toggle-pin:hover {
+            color: var(--primary);
+        }
+
+        .pin-strength {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .pin-strength.weak {
+            color: #c0392b;
+        }
+
+        .pin-strength.medium {
+            color: #9a7410;
+        }
+
+        .pin-strength.strong {
+            color: #008a55;
+        }
+
+        .register-info {
+            padding: 12px 14px;
+            border: 1px solid #e5e1ff;
+            border-radius: 10px;
+            background: #f8f7ff;
+            color: #625a8a;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .register-info strong {
+            color: #4f3bb8;
+        }
+
+        .register-actions {
+            margin-top: 3px;
+        }
+
+        .register-button {
+            width: 100%;
+        }
+
+        .register-footer {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .register-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<main class="register-page">
+    <section class="register-card">
+        <a href="index.html" class="register-brand">
+            <span class="brand-mark">P</span>
+            Payoo
+        </a>
+
+        <div class="register-heading">
+            <h1>Create your account</h1>
+            <p>Your mobile number becomes your Payoo account number.</p>
+        </div>
+
+        <div class="register-photo-section">
+            <div class="register-photo-wrapper">
+                <div class="register-photo" id="registerPhoto">P</div>
+                <button
+                    type="button"
+                    class="photo-camera-button"
+                    id="photoCameraButton"
+                    title="Add profile photo"
+                >✎</button>
+            </div>
+
+            <div class="photo-label">Add profile photo</div>
+
+            <div class="photo-actions">
+                <button type="button" id="choosePhotoButton">Choose Photo</button>
+                <button type="button" id="removePhotoButton">Remove</button>
+            </div>
+        </div>
+
+        <input
+            type="file"
+            id="profilePhotoInput"
+            accept="image/png,image/jpeg,image/webp"
+        >
+
+        <div id="formAlert"></div>
+
+        <form id="registerForm" class="register-form">
+            <div class="field">
+                <label for="registerName">Full Name</label>
+                <input
+                    id="registerName"
+                    type="text"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+            </div>
+
+            <div class="register-row">
+                <div class="field">
+                    <label for="registerMobile">Mobile Number</label>
+                    <input
+                        id="registerMobile"
+                        type="tel"
+                        name="mobile"
+                        placeholder="01712345678"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="registerNid">NID Number</label>
+                    <input
+                        id="registerNid"
+                        type="text"
+                        name="nid"
+                        placeholder="Enter NID number"
+                        inputmode="numeric"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="register-row">
+                <div class="field">
+                    <label for="registerDob">Date of Birth</label>
+                    <input
+                        id="registerDob"
+                        type="date"
+                        name="dob"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="pin">PIN</label>
+                    <div class="input-wrapper">
+                        <input
+                            id="pin"
+                            type="password"
+                            name="pin"
+                            maxlength="6"
+                            inputmode="numeric"
+                            placeholder="4–6 digit PIN"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <button
+                            type="button"
+                            class="toggle-pin"
+                            id="togglePin"
+                            title="Show PIN"
+                        >◉</button>
+                    </div>
+
+                    <div id="pinStrength" class="pin-strength">
+                        Enter a 4–6 digit PIN.
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="confirmPin">Confirm PIN</label>
+                <div class="input-wrapper">
+                    <input
+                        id="confirmPin"
+                        type="password"
+                        name="confirmPin"
+                        maxlength="6"
+                        inputmode="numeric"
+                        placeholder="Re-enter your PIN"
+                        autocomplete="new-password"
+                        required
+                    >
+                    <button
+                        type="button"
+                        class="toggle-pin"
+                        id="toggleConfirmPin"
+                        title="Show PIN"
+                    >◉</button>
+                </div>
+            </div>
+
+            <div class="register-info">
+                <strong>Demo wallet:</strong>
+                This is a frontend-only Payoo demonstration.
+                Your account information, PIN, profile photo and wallet balance
+                are stored in your browser's localStorage.
+            </div>
+
+            <div class="register-actions">
+                <button
+                    type="submit"
+                    class="btn btn-primary register-button"
+                >
+                    Create Account
+                </button>
+            </div>
+        </form>
+
+        <div class="register-footer">
+            Already registered?
+            <a href="index.html">Login</a>
+        </div>
+    </section>
+</main>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/register.js"></script>
+</body>
+</html>

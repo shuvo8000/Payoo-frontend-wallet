@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoo — Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .dashboard-content {
+            width: 100%;
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        .dashboard-welcome {
+            margin-bottom: 20px;
+        }
+
+        .dashboard-welcome h2 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.3;
+            letter-spacing: -0.4px;
+        }
+
+        .dashboard-welcome p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .dashboard-top {
+            display: grid;
+            grid-template-columns: 1.18fr 0.82fr;
+            gap: 18px;
+        }
+
+        .dashboard-balance {
+            position: relative;
+            min-height: 235px;
+            padding: 27px 29px;
+            overflow: hidden;
+            border-radius: 20px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(255,255,255,.16), transparent 27%),
+                linear-gradient(135deg, #5f40df 0%, #7654e8 55%, #8669ed 100%);
+            box-shadow: 0 16px 35px rgba(96,64,223,.18);
+        }
+
+        .dashboard-balance::before {
+            content: "";
+            position: absolute;
+            top: -145px;
+            right: -105px;
+            width: 285px;
+            height: 285px;
+            border: 1px solid rgba(255,255,255,.14);
+            border-radius: 50%;
+        }
+
+        .dashboard-balance::after {
+            content: "";
+            position: absolute;
+            right: 75px;
+            bottom: -155px;
+            width: 210px;
+            height: 210px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+        }
+
+        .balance-top {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .balance-label {
+            color: rgba(255,255,255,.72);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .balance-visibility {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 9px;
+            color: #fff;
+            background: rgba(255,255,255,.11);
+            cursor: pointer;
+        }
+
+        .balance-visibility:hover {
+            background: rgba(255,255,255,.18);
+        }
+
+        .dashboard-balance .balance-value {
+            position: relative;
+            z-index: 2;
+            margin: 13px 0 16px;
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .balance-account-row {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: rgba(255,255,255,.65);
+            font-size: 11px;
+        }
+
+        .balance-account-row strong {
+            color: #fff;
+            font-weight: 650;
+        }
+
+        .balance-bottom {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 28px;
+        }
+
+        .account-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: rgba(255,255,255,.78);
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #73e6b7;
+            box-shadow: 0 0 0 4px rgba(115,230,183,.12);
+        }
+
+        .balance-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .balance-buttons button {
+            padding: 8px 11px;
+            border: 1px solid rgba(255,255,255,.22);
+            border-radius: 8px;
+            color: #fff;
+            background: rgba(255,255,255,.10);
+            font-size: 11px;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        .balance-buttons button:hover {
+            background: rgba(255,255,255,.18);
+        }
+
+        .account-card {
+            min-height: 235px;
+            padding: 25px;
+        }
+
+        .account-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 21px;
+        }
+
+        .account-card-header h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .account-badge {
+            padding: 5px 9px;
+            border-radius: 999px;
+            color: var(--success);
+            background: var(--success-soft);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .account-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .account-user-avatar {
+            display: grid;
+            width: 46px;
+            height: 46px;
+            place-items: center;
+            border-radius: 13px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .account-user strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .account-user span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .account-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .account-info-item {
+            padding-right: 16px;
+        }
+
+        .account-info-item:first-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .account-info-item:last-child {
+            padding-right: 0;
+            padding-left: 16px;
+        }
+
+        .account-info-item span {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .account-info-item strong {
+            font-size: 12px;
+        }
+
+        .dashboard-section {
+            margin-top: 18px;
+        }
+
+        .dashboard-section .card {
+            padding: 21px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .section-heading p {
+            margin: 3px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 94px;
+            padding: 12px 8px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #fff;
+            transition: .2s ease;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            border-color: #d8d0ff;
+            box-shadow: 0 8px 20px rgba(40,35,75,.06);
+        }
+
+        .quick-icon {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            margin-bottom: 9px;
+            border-radius: 11px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .quick-action span:last-child {
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 650;
+            text-align: center;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 11px;
+        }
+
+        .overview-card {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #fff;
+        }
+
+        .overview-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .overview-label {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .overview-icon {
+            display: grid;
+            width: 31px;
+            height: 31px;
+            place-items: center;
+            border-radius: 9px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .overview-card strong {
+            display: block;
+            font-size: 19px;
+            letter-spacing: -.3px;
+        }
+
+        .overview-card small {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .transaction-header-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .transaction-header-action:hover {
+            background: #e7e1ff;
+        }
+
+        .transaction-table {
+            overflow: hidden;
+        }
+
+        .transaction-table .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table .table th {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .transaction-table .table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f4;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+
+        .transaction-table .table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .transaction-table .table tbody tr:hover {
+            background: #fafaff;
+        }
+
+        .transaction-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 220px;
+        }
+
+        .transaction-icon {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            place-items: center;
+            border-radius: 10px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .transaction-info strong {
+            display: block;
+            color: var(--text);
+            font-size: 11px;
+        }
+
+        .transaction-info span {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .transaction-info small {
+            display: block;
+            margin-top: 2px;
+            color: #a0a2af;
+            font-size: 8px;
+        }
+
+        .transaction-amount {
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .transaction-positive {
+            color: var(--success);
+        }
+
+        .transaction-negative {
+            color: var(--danger);
+        }
+
+        .transaction-date {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .transaction-date strong {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .transaction-date span {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        .transaction-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            color: var(--success);
+            background: var(--success-soft);
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .transaction-status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .dashboard-empty {
+            padding: 30px 15px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+<a class="brand" href="dashboard.html">
+    <span class="brand-mark">
+        <img src="images/payoo-logo.png" alt="Payoo">
+    </span>
+    Payoo
+</a>
+
+        <nav class="nav">
+            <a href="dashboard.html" data-nav="dashboard"><span>⌂</span>Dashboard</a>
+            <a href="add-money.html" data-nav="add-money"><span>+</span>Add Money</a>
+            <a href="send-money.html" data-nav="send-money"><span>↗</span>Send Money</a>
+            <a href="cash-out.html" data-nav="cash-out"><span>↓</span>Cash Out</a>
+            <a href="mobile-recharge.html" data-nav="mobile-recharge"><span>▣</span>Mobile Recharge</a>
+            <a href="pay-bill.html" data-nav="pay-bill"><span>◫</span>Pay Bill</a>
+            <a href="transactions.html" data-nav="transactions"><span>≡</span>Transactions</a>
+            <a href="ai-assistant.html" data-nav="ai-assistant"><span>✦</span>AI Assistant</a>
+            <a href="profile.html" data-nav="profile"><span>●</span>Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="nav" data-logout>
+                <span>↪</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="top-title">
+                <div class="page-title">
+                    <h1>Dashboard</h1>
+                    <p>Your wallet overview</p>
+                </div>
+            </div>
+
+            <div class="user-chip">
+                <div>
+                    <strong data-user-name></strong>
+                    <small class="muted block" data-user-mobile></small>
+                </div>
+                <div class="avatar" data-avatar></div>
+            </div>
+        </header>
+
+        <section class="content dashboard-content">
+
+            <div class="dashboard-welcome">
+                <h2>Welcome back, <span data-user-name></span> 👋</h2>
+                <p>Here's what's happening with your Payoo wallet today.</p>
+            </div>
+
+            <div class="dashboard-top">
+
+                <section class="dashboard-balance">
+                    <div class="balance-top">
+                        <span class="balance-label">Available Balance</span>
+                        <button id="toggleBalance" class="balance-visibility" type="button" title="Hide or show balance">◉</button>
+                    </div>
+
+                    <div class="balance-value" id="balance" data-hidden="false">৳0.00</div>
+
+                    <div class="balance-account-row">
+                        <span>Payoo Account</span>
+                        <strong id="accountMobile"></strong>
+                    </div>
+
+                    <div class="balance-bottom">
+                        <div class="account-status">
+                            <span class="status-dot"></span>
+                            Account active
+                        </div>
+
+                        <div class="balance-buttons">
+                            <button id="copyAccount" type="button">Copy account</button>
+                            <button type="button" onclick="location.href='add-money.html'">+ Add Money</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card account-card">
+                    <div class="account-card-header">
+                        <h2>Account Overview</h2>
+                        <span class="account-badge">● Active</span>
+                    </div>
+
+                    <div class="account-user">
+                        <div class="account-user-avatar" data-avatar></div>
+                        <div>
+                            <strong data-user-name></strong>
+                            <span>Payoo wallet account</span>
+                        </div>
+                    </div>
+
+                    <div class="account-info-grid">
+                        <div class="account-info-item">
+                            <span>Account Number</span>
+                            <strong data-user-mobile></strong>
+                        </div>
+
+                        <div class="account-info-item">
+                            <span>Account Status</span>
+                            <strong class="amount-positive">Active</strong>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <section class="dashboard-section">
+                <div class="card">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Quick Actions</h2>
+                            <p>Manage your wallet quickly</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <a class="quick-action" href="add-money.html">
+                            <div class="quick-icon">+</div>
+                            <span>Add Money</span>
+                        </a>
+
+                        <a class="quick-action" href="send-money.html">
+                            <div class="quick-icon">↗</div>
+                            <span>Send Money</span>
+                        </a>
+
+                        <a class="quick-action" href="cash-out.html">
+                            <div class="quick-icon">↓</div>
+                            <span>Cash Out</span>
+                        </a>
+
+                        <a class="quick-action" href="mobile-recharge.html">
+                            <div class="quick-icon">▣</div>
+                            <span>Mobile Recharge</span>
+                        </a>
+
+                        <a class="quick-action" href="pay-bill.html">
+                            <div class="quick-icon">◫</div>
+                            <span>Pay Bill</span>
+                        </a>
+
+                        <a class="quick-action" href="transactions.html">
+                            <div class="quick-icon">≡</div>
+                            <span>Transactions</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="card">
+                    <div class="section-heading">
+                        <div>
+                            <h2>Financial Overview</h2>
+                            <p>Your wallet activity</p>
+                        </div>
+                    </div>
+
+                    <div class="overview-grid">
+
+                        <div class="overview-card">
+                            <div class="overview-top">
+                                <span class="overview-label">Money Added</span>
+                                <span class="overview-icon">+</span>
+                            </div>
+                            <strong id="overviewAdded">৳0.00</strong>
+                            <small>Total added to wallet</small>
+                        </div>
+
+                        <div class="overview-card">
+                            <div class="overview-top">
+                                <span class="overview-label">Money Sent</span>
+                                <span class="overview-icon">↗</span>
+                            </div>
+                            <strong id="overviewSent">৳0.00</strong>
+                            <small>Total sent to accounts</small>
+                        </div>
+
+                        <div class="overview-card">
+                            <div class="overview-top">
+                                <span class="overview-label">Money Spent</span>
+                                <span class="overview-icon">↓</span>
+                            </div>
+                            <strong id="overviewSpent">৳0.00</strong>
+                            <small>Recharge, bills &amp; cash out</small>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="card transaction-table">
+
+                    <div class="section-heading">
+                        <div>
+                            <h2>Recent Transactions</h2>
+                            <p>Your latest wallet activity</p>
+                        </div>
+
+                        <a class="transaction-header-action" href="transactions.html">View all →</a>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Amount</th>
+                                    <th>Party</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBody"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+        </section>
+    </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
