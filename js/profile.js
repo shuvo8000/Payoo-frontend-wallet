@@ -1,592 +1,291 @@
-// Profile page setup
-document.addEventListener("DOMContentLoaded", function () {
 
-    const user = setupShell("profile");
+document.addEventListener("DOMContentLoaded",function(){
+    const user=setupShell("profile");
+    if(!user)return;
 
-    if (!user) {
-        return;
-    }
+    let currentUser=getCurrentUser();
 
-    let currentUser = getCurrentUser();
-
-    const profilePhoto =
-        document.getElementById("profilePhoto");
-
-    const profileHeaderName =
-        document.getElementById("profileHeaderName");
-
-    const profileHeaderMobile =
-        document.getElementById("profileHeaderMobile");
-
-    const profileName =
-        document.getElementById("profileName");
-
-    const profileMobile =
-        document.getElementById("profileMobile");
-
-    const profileNid =
-        document.getElementById("profileNid");
-
-    const profileDob =
-        document.getElementById("profileDob");
-
-    const profileBalance =
-        document.getElementById("profileBalance");
-
-    const copyAccount =
-        document.getElementById("copyAccount");
-
-    const editProfileButton =
-        document.getElementById("editProfileButton");
-
-    const cancelEditButton =
-        document.getElementById("cancelEditButton");
-
-    const editSection =
-        document.getElementById("editSection");
-
-    const editProfileForm =
-        document.getElementById("editProfileForm");
-
-    const profileAlert =
-        document.getElementById("profileAlert");
-
-    const changePinButton =
-        document.getElementById("changePinButton");
-
-    const cancelPinButton =
-        document.getElementById("cancelPinButton");
-
-    const pinSection =
-        document.getElementById("pinSection");
-
-    const changePinForm =
-        document.getElementById("changePinForm");
-
-    const pinAlert =
-        document.getElementById("pinAlert");
-
-    const photoInput =
-        document.getElementById("photoInput");
-
-    const photoEditButton =
-        document.getElementById("photoEditButton");
-
-    const uploadPhotoButton =
-        document.getElementById("uploadPhotoButton");
-
-    const removePhotoButton =
-        document.getElementById("removePhotoButton");
-
-    const photoKey =
-        "payoo_profile_photo_" +
-        currentUser.mobile;
+    const profilePhoto=document.getElementById("profilePhoto");
+    const profileHeaderName=document.getElementById("profileHeaderName");
+    const profileHeaderMobile=document.getElementById("profileHeaderMobile");
+    const profileName=document.getElementById("profileName");
+    const profileMobile=document.getElementById("profileMobile");
+    const profileNid=document.getElementById("profileNid");
+    const profileDob=document.getElementById("profileDob");
+    const profileBalance=document.getElementById("profileBalance");
+    const copyAccount=document.getElementById("copyAccount");
+    const editProfileButton=document.getElementById("editProfileButton");
+    const cancelEditButton=document.getElementById("cancelEditButton");
+    const editSection=document.getElementById("editSection");
+    const editProfileForm=document.getElementById("editProfileForm");
+    const profileAlert=document.getElementById("profileAlert");
+    const changePinButton=document.getElementById("changePinButton");
+    const cancelPinButton=document.getElementById("cancelPinButton");
+    const pinSection=document.getElementById("pinSection");
+    const changePinForm=document.getElementById("changePinForm");
+    const pinAlert=document.getElementById("pinAlert");
+    const photoInput=document.getElementById("photoInput");
+    const photoEditButton=document.getElementById("photoEditButton");
+    const uploadPhotoButton=document.getElementById("uploadPhotoButton");
+    const removePhotoButton=document.getElementById("removePhotoButton");
+    const photoKey="payoo_profile_photo_"+currentUser.mobile;
 
     // Show profile information
-    function renderProfile() {
+    function renderProfile(){
+        currentUser=getCurrentUser();
+        if(!currentUser)return;
 
-        currentUser = getCurrentUser();
-
-        if (!currentUser) {
-            return;
-        }
-
-        profileHeaderName.textContent =
-            currentUser.name || "-";
-
-        profileHeaderMobile.textContent =
-            currentUser.mobile || "-";
-
-        profileName.textContent =
-            currentUser.name || "-";
-
-        profileMobile.textContent =
-            currentUser.mobile || "-";
-
-        profileNid.textContent =
-            currentUser.nid || "-";
-
-        profileDob.textContent =
-            currentUser.dob || "-";
-
-        profileBalance.textContent =
-            money(currentUser.balance);
+        profileHeaderName.textContent=currentUser.name||"-";
+        profileHeaderMobile.textContent=currentUser.mobile||"-";
+        profileName.textContent=currentUser.name||"-";
+        profileMobile.textContent=currentUser.mobile||"-";
+        profileNid.textContent=currentUser.nid||"-";
+        profileDob.textContent=currentUser.dob||"-";
+        profileBalance.textContent=money(currentUser.balance);
 
         renderProfilePhoto();
     }
 
-    // Show profile photo
-    function renderProfilePhoto() {
+    function renderProfilePhoto(){
+        const savedPhoto=localStorage.getItem(photoKey);
 
-        const savedPhoto =
-            localStorage.getItem(photoKey);
-
-        if (savedPhoto) {
-
-            profilePhoto.innerHTML =
-                '<img src="' +
-                savedPhoto +
-                '" alt="Profile photo">';
-
+        if(savedPhoto){
+            profilePhoto.innerHTML=
+                '<img src="'+savedPhoto+'" alt="Profile photo">';
             return;
         }
 
-        profilePhoto.textContent =
-            initials(currentUser.name);
+        profilePhoto.textContent=initials(currentUser.name);
     }
 
-    // Open photo selector
-    function openPhotoSelector() {
-
-        if (photoInput) {
-            photoInput.click();
-        }
+    function openPhotoSelector(){
+        if(photoInput)photoInput.click();
     }
 
-    // Edit profile photo
-    if (photoEditButton) {
-        photoEditButton.addEventListener(
-            "click",
-            openPhotoSelector
-        );
+    if(photoEditButton){
+        photoEditButton.addEventListener("click",openPhotoSelector);
     }
 
-    // Upload profile photo
-    if (uploadPhotoButton) {
-        uploadPhotoButton.addEventListener(
-            "click",
-            openPhotoSelector
-        );
+    if(uploadPhotoButton){
+        uploadPhotoButton.addEventListener("click",openPhotoSelector);
     }
 
-    // Select profile photo
-    if (photoInput) {
+    if(photoInput){
+        photoInput.addEventListener("change",function(){
+            const file=photoInput.files[0];
+            if(!file)return;
 
-        photoInput.addEventListener(
-            "change",
-            function () {
-
-                const file =
-                    photoInput.files[0];
-
-                if (!file) {
-                    return;
-                }
-
-                // Check image type
-                if (!file.type.startsWith("image/")) {
-
-                    showToast(
-                        "Please select an image file."
-                    );
-
-                    photoInput.value = "";
-
-                    return;
-                }
-
-                // Check image size
-                if (file.size > 2 * 1024 * 1024) {
-
-                    showToast(
-                        "Image size must be less than 2 MB."
-                    );
-
-                    photoInput.value = "";
-
-                    return;
-                }
-
-                // Read image
-                const reader =
-                    new FileReader();
-
-                reader.onload =
-                    function () {
-
-                        localStorage.setItem(
-                            photoKey,
-                            reader.result
-                        );
-
-                        renderProfilePhoto();
-
-                        showToast(
-                            "Profile photo updated."
-                        );
-                    };
-
-                reader.readAsDataURL(file);
+            if(!file.type.startsWith("image/")){
+                showToast("Please select an image file.");
+                photoInput.value="";
+                return;
             }
-        );
-    }
 
-    // Remove profile photo
-    if (removePhotoButton) {
+            if(file.size>2*1024*1024){
+                showToast("Image size must be less than 2 MB.");
+                photoInput.value="";
+                return;
+            }
 
-        removePhotoButton.addEventListener(
-            "click",
-            function () {
+            const reader=new FileReader();
 
-                const savedPhoto =
-                    localStorage.getItem(photoKey);
-
-                if (!savedPhoto) {
-
-                    showToast(
-                        "No profile photo to remove."
-                    );
-
-                    return;
-                }
-
-                localStorage.removeItem(
-                    photoKey
-                );
-
+            reader.onload=function(){
+                localStorage.setItem(photoKey,reader.result);
                 renderProfilePhoto();
+                showToast("Profile photo updated.");
+            };
 
-                showToast(
-                    "Profile photo removed."
-                );
-            }
-        );
+            reader.readAsDataURL(file);
+        });
     }
 
-    // Open edit profile section
-    if (editProfileButton) {
+    if(removePhotoButton){
+        removePhotoButton.addEventListener("click",function(){
+            const savedPhoto=localStorage.getItem(photoKey);
 
-        editProfileButton.addEventListener(
-            "click",
-            function () {
-
-                const userData =
-                    getCurrentUser();
-
-                if (!userData) {
-                    return;
-                }
-
-                editProfileForm.name.value =
-                    userData.name || "";
-
-                editProfileForm.mobile.value =
-                    userData.mobile || "";
-
-                editProfileForm.nid.value =
-                    userData.nid || "";
-
-                editProfileForm.dob.value =
-                    userData.dob || "";
-
-                profileAlert.innerHTML = "";
-
-                editSection.classList.add("active");
-
-                editProfileButton.style.display =
-                    "none";
+            if(!savedPhoto){
+                showToast("No profile photo to remove.");
+                return;
             }
-        );
+
+            localStorage.removeItem(photoKey);
+            renderProfilePhoto();
+            showToast("Profile photo removed.");
+        });
     }
 
-    // Cancel profile editing
-    if (cancelEditButton) {
+    // Edit profile
+    if(editProfileButton){
+        editProfileButton.addEventListener("click",function(){
+            const userData=getCurrentUser();
+            if(!userData)return;
 
-        cancelEditButton.addEventListener(
-            "click",
-            function () {
+            editProfileForm.name.value=userData.name||"";
+            editProfileForm.mobile.value=userData.mobile||"";
+            editProfileForm.nid.value=userData.nid||"";
+            editProfileForm.dob.value=userData.dob||"";
 
-                editSection.classList.remove(
-                    "active"
-                );
-
-                editProfileButton.style.display =
-                    "inline-flex";
-
-                editProfileForm.reset();
-
-                profileAlert.innerHTML = "";
-            }
-        );
+            profileAlert.innerHTML="";
+            editSection.classList.add("active");
+            editProfileButton.style.display="none";
+        });
     }
 
-    // Update profile
-    if (editProfileForm) {
+    if(cancelEditButton){
+        cancelEditButton.addEventListener("click",function(){
+            editSection.classList.remove("active");
+            editProfileButton.style.display="inline-flex";
+            editProfileForm.reset();
+            profileAlert.innerHTML="";
+        });
+    }
 
-        editProfileForm.addEventListener(
-            "submit",
-            function (event) {
+    if(editProfileForm){
+        editProfileForm.addEventListener("submit",function(event){
+            event.preventDefault();
 
-                event.preventDefault();
+            const userData=getCurrentUser();
+            if(!userData)return;
 
-                const userData =
-                    getCurrentUser();
+            const name=editProfileForm.name.value.trim();
+            const nid=editProfileForm.nid.value.trim();
+            const dob=editProfileForm.dob.value;
 
-                if (!userData) {
-                    return;
-                }
+            if(name.length<2){
+                showAlert(profileAlert,"Please enter a valid full name.");
+                return;
+            }
 
-                const name =
-                    editProfileForm.name.value.trim();
+            if(!nid){
+                showAlert(profileAlert,"Please enter your NID number.");
+                return;
+            }
 
-                const nid =
-                    editProfileForm.nid.value.trim();
+            if(!dob){
+                showAlert(profileAlert,"Please select your date of birth.");
+                return;
+            }
 
-                const dob =
-                    editProfileForm.dob.value;
+            userData.name=name;
+            userData.nid=nid;
+            userData.dob=dob;
 
-                // Check name
-                if (name.length < 2) {
+            const updatedUser=updateUser(userData);
 
-                    showAlert(
-                        profileAlert,
-                        "Please enter a valid full name."
-                    );
-
-                    return;
-                }
-
-                // Check NID
-                if (!nid) {
-
-                    showAlert(
-                        profileAlert,
-                        "Please enter your NID number."
-                    );
-
-                    return;
-                }
-
-                // Check date of birth
-                if (!dob) {
-
-                    showAlert(
-                        profileAlert,
-                        "Please select your date of birth."
-                    );
-
-                    return;
-                }
-
-                // Update editable information
-                userData.name = name;
-                userData.nid = nid;
-                userData.dob = dob;
-
-                const updatedUser =
-                    updateUser(userData);
-
-                if (!updatedUser) {
-
-                    showAlert(
-                        profileAlert,
-                        "Unable to update your profile."
-                    );
-
-                    return;
-                }
-
-                renderProfile();
-
+            if(!updatedUser){
                 showAlert(
                     profileAlert,
-                    "Profile updated successfully.",
-                    "success"
+                    "Unable to update your profile."
                 );
-
-                // Close edit section
-                setTimeout(
-                    function () {
-
-                        editSection.classList.remove(
-                            "active"
-                        );
-
-                        editProfileButton.style.display =
-                            "inline-flex";
-
-                        profileAlert.innerHTML = "";
-                    },
-                    1200
-                );
+                return;
             }
-        );
+
+            renderProfile();
+
+            showAlert(
+                profileAlert,
+                "Profile updated successfully.",
+                "success"
+            );
+
+            setTimeout(function(){
+                editSection.classList.remove("active");
+                editProfileButton.style.display="inline-flex";
+                profileAlert.innerHTML="";
+            },1200);
+        });
     }
 
-    // Copy account number
-    if (copyAccount) {
+    if(copyAccount){
+        copyAccount.addEventListener("click",function(){
+            const userData=getCurrentUser();
 
-        copyAccount.addEventListener(
-            "click",
-            function () {
-
-                const userData =
-                    getCurrentUser();
-
-                if (userData) {
-                    copyText(userData.mobile);
-                }
-            }
-        );
-    }
-
-    // Open change PIN section
-    if (changePinButton) {
-
-        changePinButton.addEventListener(
-            "click",
-            function () {
-
-                pinSection.classList.add(
-                    "active"
-                );
-
-                changePinButton.style.display =
-                    "none";
-
-                pinAlert.innerHTML = "";
-            }
-        );
-    }
-
-    // Cancel PIN change
-    if (cancelPinButton) {
-
-        cancelPinButton.addEventListener(
-            "click",
-            function () {
-
-                pinSection.classList.remove(
-                    "active"
-                );
-
-                changePinButton.style.display =
-                    "inline-flex";
-
-                changePinForm.reset();
-
-                pinAlert.innerHTML = "";
-            }
-        );
+            if(userData)copyText(userData.mobile);
+        });
     }
 
     // Change PIN
-    if (changePinForm) {
-
-        changePinForm.addEventListener(
-            "submit",
-            function (event) {
-
-                event.preventDefault();
-
-                const userData =
-                    getCurrentUser();
-
-                if (!userData) {
-                    return;
-                }
-
-                const currentPin =
-                    changePinForm.currentPin.value;
-
-                const newPin =
-                    changePinForm.newPin.value;
-
-                const confirmPin =
-                    changePinForm.confirmPin.value;
-
-                // Check current PIN
-                if (
-                    !verifyPin(
-                        userData,
-                        currentPin
-                    )
-                ) {
-
-                    showAlert(
-                        pinAlert,
-                        "Current PIN is incorrect."
-                    );
-
-                    return;
-                }
-
-                // Check new PIN
-                if (!validPin(newPin)) {
-
-                    showAlert(
-                        pinAlert,
-                        "New PIN must contain 4 to 6 digits."
-                    );
-
-                    return;
-                }
-
-                // Check confirm PIN
-                if (newPin !== confirmPin) {
-
-                    showAlert(
-                        pinAlert,
-                        "New PIN and confirm PIN do not match."
-                    );
-
-                    return;
-                }
-
-                // Prevent same PIN
-                if (currentPin === newPin) {
-
-                    showAlert(
-                        pinAlert,
-                        "New PIN must be different from your current PIN."
-                    );
-
-                    return;
-                }
-
-                // Update PIN
-                userData.pin = newPin;
-
-                const updatedUser =
-                    updateUser(userData);
-
-                if (!updatedUser) {
-
-                    showAlert(
-                        pinAlert,
-                        "Unable to update your PIN."
-                    );
-
-                    return;
-                }
-
-                changePinForm.reset();
-
-                showAlert(
-                    pinAlert,
-                    "PIN changed successfully.",
-                    "success"
-                );
-
-                // Close PIN section
-                setTimeout(
-                    function () {
-
-                        pinSection.classList.remove(
-                            "active"
-                        );
-
-                        changePinButton.style.display =
-                            "inline-flex";
-
-                        pinAlert.innerHTML = "";
-                    },
-                    1500
-                );
-            }
-        );
+    if(changePinButton){
+        changePinButton.addEventListener("click",function(){
+            pinSection.classList.add("active");
+            changePinButton.style.display="none";
+            pinAlert.innerHTML="";
+        });
     }
 
-    // Initial profile display
+    if(cancelPinButton){
+        cancelPinButton.addEventListener("click",function(){
+            pinSection.classList.remove("active");
+            changePinButton.style.display="inline-flex";
+            changePinForm.reset();
+            pinAlert.innerHTML="";
+        });
+    }
+
+    if(changePinForm){
+        changePinForm.addEventListener("submit",function(event){
+            event.preventDefault();
+
+            const userData=getCurrentUser();
+            if(!userData)return;
+
+            const currentPin=changePinForm.currentPin.value;
+            const newPin=changePinForm.newPin.value;
+            const confirmPin=changePinForm.confirmPin.value;
+
+            if(!verifyPin(userData,currentPin)){
+                showAlert(pinAlert,"Current PIN is incorrect.");
+                return;
+            }
+
+            if(!validPin(newPin)){
+                showAlert(
+                    pinAlert,
+                    "New PIN must contain 4 to 6 digits."
+                );
+                return;
+            }
+
+            if(newPin!==confirmPin){
+                showAlert(
+                    pinAlert,
+                    "New PIN and confirm PIN do not match."
+                );
+                return;
+            }
+
+            if(currentPin===newPin){
+                showAlert(
+                    pinAlert,
+                    "New PIN must be different from your current PIN."
+                );
+                return;
+            }
+
+            userData.pin=newPin;
+
+            const updatedUser=updateUser(userData);
+
+            if(!updatedUser){
+                showAlert(pinAlert,"Unable to update your PIN.");
+                return;
+            }
+
+            changePinForm.reset();
+
+            showAlert(
+                pinAlert,
+                "PIN changed successfully.",
+                "success"
+            );
+
+            setTimeout(function(){
+                pinSection.classList.remove("active");
+                changePinButton.style.display="inline-flex";
+                pinAlert.innerHTML="";
+            },1500);
+        });
+    }
+
     renderProfile();
 });

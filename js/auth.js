@@ -1,98 +1,112 @@
-// Login page setup
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded",function(){
+    const form=document.getElementById("loginForm");
+    const alertBox=document.getElementById("formAlert");
+    const pinInput=document.getElementById("loginPin");
+    const pinToggle=document.getElementById("pinToggle");
 
-    const form = document.getElementById("loginForm");
-    const alertBox = document.getElementById("formAlert");
-    const pinInput = document.getElementById("loginPin");
-    const pinToggle = document.getElementById("pinToggle");
+    if(!form)return;
 
-    if (!form) {
-        return;
+    function showLoginMessage(message,type){
+        if(!alertBox)return;
+
+        alertBox.textContent=message;
+        alertBox.style.display="block";
+        alertBox.style.marginBottom="18px";
+        alertBox.style.padding="12px 14px";
+        alertBox.style.borderRadius="10px";
+        alertBox.style.fontSize="13px";
+        alertBox.style.fontWeight="600";
+
+        if(type==="success"){
+            alertBox.style.border="1px solid #bfe8d1";
+            alertBox.style.background="#effaf4";
+            alertBox.style.color="#16834f";
+        }else{
+            alertBox.style.border="1px solid #f0cccc";
+            alertBox.style.background="#fff4f4";
+            alertBox.style.color="#c23b3b";
+        }
+    }
+
+    function clearLoginMessage(){
+        if(!alertBox)return;
+
+        alertBox.textContent="";
+        alertBox.style.display="none";
     }
 
     // Show or hide PIN
-    if (pinToggle && pinInput) {
-        pinToggle.addEventListener("click", function () {
-
-            if (pinInput.type === "password") {
-                pinInput.type = "text";
-                pinToggle.textContent = "◌";
-                pinToggle.title = "Hide PIN";
-            } else {
-                pinInput.type = "password";
-                pinToggle.textContent = "◉";
-                pinToggle.title = "Show PIN";
+    if(pinToggle&&pinInput){
+        pinToggle.addEventListener("click",function(){
+            if(pinInput.type==="password"){
+                pinInput.type="text";
+                pinToggle.textContent="◌";
+                pinToggle.title="Hide PIN";
+            }else{
+                pinInput.type="password";
+                pinToggle.textContent="◉";
+                pinToggle.title="Show PIN";
             }
-
         });
     }
 
     // Login form
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit",function(event){
         event.preventDefault();
+        clearLoginMessage();
 
-        const mobile = normalizeMobile(form.mobile.value);
-        const pin = form.pin.value;
+        const mobile=normalizeMobile(form.mobile.value);
+        const pin=form.pin.value;
 
-        // Check mobile number
-        if (!validMobile(mobile)) {
-            showAlert(
-                alertBox,
-                "Enter a valid Bangladesh mobile number."
-            );
+        if(!mobile){
+            showLoginMessage("Enter your mobile number.");
             return;
         }
 
-        // Check PIN
-        if (!validPin(pin)) {
-            showAlert(
-                alertBox,
-                "Enter a valid 4–6 digit PIN."
-            );
+        if(!validMobile(mobile)){
+            showLoginMessage("Enter a valid Bangladesh mobile number.");
+            return;
+        }
+
+        if(!pin){
+            showLoginMessage("Enter your PIN.");
+            return;
+        }
+
+        if(!validPin(pin)){
+            showLoginMessage("Enter a valid 4–6 digit PIN.");
             return;
         }
 
         // Find user
-        const user = findUserByMobile(mobile);
+        const user=findUserByMobile(mobile);
 
-        if (!user) {
-            showAlert(
-                alertBox,
-                "No Payoo account found with this mobile number."
-            );
+        if(!user){
+            showLoginMessage("Incorrect mobile number or PIN.");
             return;
         }
 
-        // Check PIN
-        if (!verifyPin(user, pin)) {
-            showAlert(
-                alertBox,
-                "Incorrect mobile number or PIN."
-            );
+        if(!verifyPin(user,pin)){
+            showLoginMessage("Incorrect mobile number or PIN.");
             return;
         }
 
-        // Save logged-in user
         setCurrentMobile(user.mobile);
 
-        showAlert(
-            alertBox,
-            "Login successful. Redirecting...",
+        showLoginMessage(
+            "✓ Login successful. Redirecting...",
             "success"
         );
 
-        // Disable login button
-        const loginButton = form.querySelector(
-            "button[type='submit']"
-        );
+        const loginButton=form.querySelector("button[type='submit']");
 
-        if (loginButton) {
-            loginButton.disabled = true;
+        if(loginButton){
+            loginButton.disabled=true;
+            loginButton.textContent="Logging in...";
         }
 
-        // Go to dashboard
-        setTimeout(function () {
-            location.href = "dashboard.html";
-        }, 500);
+        setTimeout(function(){
+            location.href="dashboard.html";
+        },500);
     });
 });

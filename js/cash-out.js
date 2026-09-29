@@ -1,67 +1,61 @@
-// Cash Out page setup
-document.addEventListener("DOMContentLoaded", function () {
-    const user = setupShell("cash-out");
 
-    if (!user) {
-        return;
+document.addEventListener("DOMContentLoaded",function(){
+    const user=setupShell("cash-out");
+    if(!user)return;
+
+    const form=document.getElementById("cashOutForm");
+    const alertBox=document.getElementById("formAlert");
+    const agentInput=document.getElementById("agent");
+    const amountInput=document.getElementById("amount");
+    const pinInput=document.getElementById("pin");
+    const feeElement=document.getElementById("fee");
+    const totalElement=document.getElementById("total");
+    const togglePin=document.getElementById("togglePin");
+
+    if(feeElement){
+        feeElement.textContent=money(LIMITS.cashOutFee);
     }
 
-    const form = document.getElementById("cashOutForm");
-    const alertBox = document.getElementById("formAlert");
-    const agentInput = document.getElementById("agent");
-    const amountInput = document.getElementById("amount");
-    const pinInput = document.getElementById("pin");
-    const feeElement = document.getElementById("fee");
-    const totalElement = document.getElementById("total");
-    const togglePin = document.getElementById("togglePin");
+    function updateTotal(){
+        const amount=Number(amountInput.value)||0;
+        const total=amount+LIMITS.cashOutFee;
 
-    if (feeElement) {
-        feeElement.textContent = money(LIMITS.cashOutFee);
-    }
-
-    function updateTotal() {
-        const amount = Number(amountInput.value) || 0;
-        const total = amount + LIMITS.cashOutFee;
-
-        if (totalElement) {
-            totalElement.textContent = money(total);
+        if(totalElement){
+            totalElement.textContent=money(total);
         }
     }
 
-    if (amountInput) {
-        amountInput.addEventListener("input", updateTotal);
+    if(amountInput){
+        amountInput.addEventListener("input",updateTotal);
     }
 
-    if (togglePin && pinInput) {
-        togglePin.addEventListener("click", function () {
-            if (pinInput.type === "password") {
-                pinInput.type = "text";
-                togglePin.textContent = "◌";
-                togglePin.title = "Hide PIN";
-            } else {
-                pinInput.type = "password";
-                togglePin.textContent = "◉";
-                togglePin.title = "Show PIN";
+    if(togglePin&&pinInput){
+        togglePin.addEventListener("click",function(){
+            if(pinInput.type==="password"){
+                pinInput.type="text";
+                togglePin.textContent="◌";
+                togglePin.title="Hide PIN";
+            }else{
+                pinInput.type="password";
+                togglePin.textContent="◉";
+                togglePin.title="Show PIN";
             }
         });
     }
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit",function(event){
         event.preventDefault();
 
-        const currentUser = getCurrentUser();
+        const currentUser=getCurrentUser();
+        if(!currentUser)return;
 
-        if (!currentUser) {
-            return;
-        }
+        const agent=normalizeMobile(agentInput.value);
+        const amount=Number(amountInput.value);
+        const total=amount+LIMITS.cashOutFee;
+        const pin=pinInput.value;
 
-        const agent = normalizeMobile(agentInput.value);
-        const amount = Number(amountInput.value);
-        const total = amount + LIMITS.cashOutFee;
-        const pin = pinInput.value;
-
-        // Check agent number
-        if (!validMobile(agent)) {
+        // Validate cash out
+        if(!validMobile(agent)){
             showAlert(
                 alertBox,
                 "Enter a valid Bangladesh agent mobile number."
@@ -69,52 +63,36 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Check amount
-        if (
-            !validAmount(
-                amount,
-                LIMITS.cashOutMin,
-                LIMITS.cashOutMax
-            )
-        ) {
+        if(!validAmount(amount,LIMITS.cashOutMin,LIMITS.cashOutMax)){
             showAlert(
                 alertBox,
-                "Amount must be between " +
-                money(LIMITS.cashOutMin) +
-                " and " +
-                money(LIMITS.cashOutMax) +
-                "."
+                "Amount must be between "+
+                money(LIMITS.cashOutMin)+" and "+
+                money(LIMITS.cashOutMax)+"."
             );
             return;
         }
 
-        // Check balance including fee
-        if (Number(currentUser.balance) < total) {
+        if(Number(currentUser.balance)<total){
             showAlert(
                 alertBox,
-                "Insufficient balance. You need " +
-                money(total) +
-                " including the fee."
+                "Insufficient balance. You need "+
+                money(total)+" including the fee."
             );
             return;
         }
 
-        // Check PIN
-        if (!verifyPin(currentUser, pin)) {
-            showAlert(
-                alertBox,
-                "Incorrect PIN."
-            );
+        if(!verifyPin(currentUser,pin)){
+            showAlert(alertBox,"Incorrect PIN.");
             return;
         }
 
-        // Deduct cash out amount + fee
-        const updatedUser = updateBalance(
+        const updatedUser=updateBalance(
             currentUser.mobile,
             -total
         );
 
-        if (!updatedUser) {
+        if(!updatedUser){
             showAlert(
                 alertBox,
                 "Unable to update wallet balance."
@@ -122,14 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Save cash out transaction
         addTransaction({
-            type: "cash_out",
-            account: currentUser.mobile,
-            agent: agent,
-            amount: amount,
-            fee: LIMITS.cashOutFee,
-            balanceAfter: updatedUser.balance
+            type:"cash_out",
+            account:currentUser.mobile,
+            agent:agent,
+            amount:amount,
+            fee:LIMITS.cashOutFee,
+            balanceAfter:updatedUser.balance
         });
 
         form.reset();
@@ -137,11 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         showAlert(
             alertBox,
-            "Cash Out successful. " +
-            money(amount) +
-            " withdrawn with a " +
-            money(LIMITS.cashOutFee) +
-            " fee.",
+            "Cash Out successful. "+
+            money(amount)+" withdrawn with a "+
+            money(LIMITS.cashOutFee)+" fee.",
             "success"
         );
     });
